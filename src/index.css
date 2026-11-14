@@ -1,0 +1,71 @@
+/* src/index.css — Tailwind v4 CSS-first configuration */
+@import "tailwindcss";
+
+/* ─── Design tokens: warm paper, ink, one accent ─── */
+@theme {
+  --color-paper: #F2EFE8;
+  --color-paper-2: #E9E5DB;
+  --color-ink: #15171A;
+  --color-ink-soft: #5B5E66;   /* 5.9:1 on paper */
+  --color-line: #D5D0C4;
+  --color-accent: #E5431B;     /* display and decoration only, never body text */
+  --color-on-ink: #F2EFE8;
+  --color-on-ink-soft: #A3A49F;
+  --color-ok: #2E9E5B;
+
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* Small uppercase mono label used across the page */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Underline that draws in from the left on hover */
+.link-draw {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s var(--ease-out-expo);
+}
+.link-draw:hover,
+.link-draw:focus-visible { background-size: 100% 1px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .link-draw { transition: none; }
+}
