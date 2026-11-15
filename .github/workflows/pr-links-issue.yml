@@ -1,0 +1,28 @@
+# Copy to .github/workflows/pr-links-issue.yml in a repo.
+# Fails a pull request whose description links no issue ("Closes #12", "Fixes #12", "Refs #12").
+# Rule: no hidden work. Every pull request belongs to an issue on the board.
+name: PR links an issue
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+# The job reads only the event payload, so it needs no token permissions.
+permissions: {}
+
+jobs:
+  linked-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require an issue link in the pull request description
+        env:
+          # Passed through the environment, never pasted into the script, so text in the description cannot run as code.
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          pattern='(^|[^[:alnum:]])(close[sd]?|fix(e[sd])?|resolve[sd]?|refs)[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+'
+          if printf '%s' "$PR_BODY" | grep -Eiq "$pattern"; then
+            echo "Issue link found."
+          else
+            echo "::error::This pull request links no issue. Add a line such as 'Closes #12' to the description."
+            exit 1
+          fi
